@@ -38,7 +38,7 @@ namespace SteamAccountSwitcher
                     var p = new Process();
                     if (File.Exists(InstallDir))
                     {
-                        p.StartInfo = new ProcessStartInfo(InstallDir, a.getStartParameters());
+                        p.StartInfo = new ProcessStartInfo(InstallDir, a.GetStartParameters());
                         p.Start();
                         finished = true;
                         return true;

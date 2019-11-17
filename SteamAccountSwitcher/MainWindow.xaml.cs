@@ -38,8 +38,7 @@ namespace SteamAccountSwitcher
             //Get directory of Executable
             settingsSave = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)
                 .TrimStart(@"file:\\".ToCharArray());
-
-
+            
             try
             {
                 ReadAccountsFromFile();
@@ -48,8 +47,7 @@ namespace SteamAccountSwitcher
             {
                 //Maybe create file?
             }
-
-
+            
             listBoxAccounts.ItemsSource = accountList.Accounts;
             listBoxAccounts.Items.Refresh();
 
