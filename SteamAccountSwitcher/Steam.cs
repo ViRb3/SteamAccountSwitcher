@@ -1,81 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 
 namespace SteamAccountSwitcher
 {
-    class Steam
+    internal class Steam
     {
-        string installDir;
-
         public Steam(string installDir)
         {
-            this.installDir = installDir;
+            InstallDir = installDir;
         }
 
-        public string InstallDir
-        {
-            get { return installDir; }
-            set { installDir = value; }
-        }
+        public string InstallDir { get; set; }
 
         public bool IsSteamRunning()
         {
-            Process[] pname = Process.GetProcessesByName("steam");
+            var pname = Process.GetProcessesByName("steam");
             if (pname.Length == 0)
                 return false;
-            else
-                return true;
+            return true;
         }
 
         public void KillSteam()
         {
-            Process [] proc = Process.GetProcessesByName("steam");
-	        proc[0].Kill();
+            var proc = Process.GetProcessesByName("steam");
+            proc[0].Kill();
         }
 
         public bool StartSteamAccount(SteamAccount a)
         {
-            bool finished = false;
+            var finished = false;
 
-            if(IsSteamRunning())
-            {
-                KillSteam();
-            }
+            if (IsSteamRunning()) KillSteam();
 
             while (finished == false)
-            {
                 if (IsSteamRunning() == false)
                 {
-                    Process p = new Process();
-                    if (File.Exists(installDir))
+                    var p = new Process();
+                    if (File.Exists(InstallDir))
                     {
-                        p.StartInfo = new ProcessStartInfo(installDir, a.getStartParameters());
+                        p.StartInfo = new ProcessStartInfo(InstallDir, a.getStartParameters());
                         p.Start();
                         finished = true;
                         return true;
                     }
                 }
-            }
+
             return false;
         }
 
 
         public bool LogoutSteam()
         {
-            Process p = new Process();
-            if (File.Exists(installDir))
+            var p = new Process();
+            if (File.Exists(InstallDir))
             {
-                p.StartInfo = new ProcessStartInfo(installDir, "-shutdown");
+                p.StartInfo = new ProcessStartInfo(InstallDir, "-shutdown");
                 p.Start();
                 return true;
             }
+
             return false;
-            
         }
     }
 }

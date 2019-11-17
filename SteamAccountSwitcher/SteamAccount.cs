@@ -1,78 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SteamAccountSwitcher
+﻿namespace SteamAccountSwitcher
 {
     public class SteamAccount
     {
-        string name;
-        string username;
-        string password;
-        AccountType type;
-
         public SteamAccount()
         {
-           
         }
 
         public SteamAccount(string username, string password)
         {
-            this.name = username;
-            this.username = username;
-            this.password = password;
-            this.type = AccountType.Main;
+            Name = username;
+            Username = username;
+            Password = password;
+            Type = AccountType.Main;
         }
 
-        public string Name
-        {
-            get { return name; }
-            set { this.name = value; }
-        }
+        public string Name { get; set; }
 
-        public string Username
-        {
-            get { return username; }
-            set { this.username = value; }
-        }
+        public string Username { get; set; }
 
-        public string Password
-        {
-            get { return password; }
-            set { this.password = value; }
-        }
+        public string Password { get; set; }
 
-        public AccountType Type
-        {
-            get { return type; }
-            set { this.type = value; }
-        }
+        public AccountType Type { get; set; }
 
         public string Icon
         {
-            get 
+            get
             {
-                if (this.type == AccountType.Main)
-                {
-                    return "steam-ico-main.png";
-                }
-                if(this.type == AccountType.Smurf)
-                {
-                    return "steam-ico-smurf.png";
-                }
+                if (Type == AccountType.Main) return "steam-ico-main.png";
+                if (Type == AccountType.Smurf) return "steam-ico-smurf.png";
                 return null;
             }
         }
 
         public string getStartParameters()
         {
-            return "-login " + this.username + " " + this.password;
+            return "-login " + Username + " " + Password;
         }
+
         public override string ToString()
         {
-            return name + "~ (user: " + username + ")";
+            return Name + "~ (user: " + Username + ")";
         }
     }
 }

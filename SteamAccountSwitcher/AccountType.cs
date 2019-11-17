@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SteamAccountSwitcher
+﻿namespace SteamAccountSwitcher
 {
     public enum AccountType
     {
-        Main, Smurf
+        Main,
+        Smurf
     }
 }

@@ -9,9 +9,10 @@
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45" Source="{Binding Icon}"/>
+                            <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45"
+                                   Source="{Binding Icon}" />
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12pt"/>
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12pt" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Username: " />
                                     <TextBlock Text="{Binding Username}" />
@@ -20,8 +21,8 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
-                            <Image Source="remove.png" MouseUp="Image_MouseUp"  Width="24px" Height="24px" HorizontalAlignment="Right" >
-                            </Image>
+                            <Image Source="remove.png" MouseUp="Image_MouseUp" Width="24px" Height="24px"
+                                   HorizontalAlignment="Right" />
                         </StackPanel>
 
                     </Grid>
@@ -35,9 +36,12 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
-        <Button x:Name="buttonAddAccount" Content="Add" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="buttonAddAccount_Click" HorizontalAlignment="Left" Width="35"/>
-        <Button x:Name="buttonEditAccount" Content="Edit" Margin="50,0,0,10" Click="buttonEditAccount_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35"/>
+        <Button x:Name="buttonAddAccount" Content="Add" Margin="10,0,0,10" VerticalAlignment="Bottom"
+                Click="buttonAddAccount_Click" HorizontalAlignment="Left" Width="35" />
+        <Button x:Name="buttonEditAccount" Content="Edit" Margin="50,0,0,10" Click="buttonEditAccount_Click"
+                Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35" />
 
-        <Button x:Name="buttonLogout" Content="Steam Logout" Margin="0,0,10,10" Click="buttonLogout_Click" Foreground="#FFDC0000" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="86"/>
+        <Button x:Name="buttonLogout" Content="Steam Logout" Margin="0,0,10,10" Click="buttonLogout_Click"
+                Foreground="#FFDC0000" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="86" />
     </Grid>
 </Window>
