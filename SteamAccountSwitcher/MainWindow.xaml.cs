@@ -22,21 +22,24 @@ namespace SteamAccountSwitcher
 
             if (SteamDataFileInfo.Exists)
                 ReadSteamData();
-            else
-                SaveSteamData();
+
+            if (!File.Exists(_steamData.SteamFilePath))
+            {
+                _steamData.SteamFilePath = SelectSteamFile(@"C:\Program Files (x86)\Steam");
+                if (_steamData.SteamFilePath == null)
+                {
+                    MessageBox.Show(
+                        "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
+                        "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                    return;
+                }
+            }
+
+            SaveSteamData();
 
             listBoxAccounts.ItemsSource = _steamData.Accounts;
             UpdateListBoxView();
-
-            _steamData.SteamFilePath = SelectSteamFile(@"C:\Program Files (x86)\Steam");
-            if (_steamData.SteamFilePath == null)
-            {
-                MessageBox.Show(
-                    "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
-                    "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
-                return;
-            }
 
             _steam = new Steam(_steamData.SteamFilePath);
         }
