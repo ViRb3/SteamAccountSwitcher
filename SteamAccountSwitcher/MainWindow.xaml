@@ -8,7 +8,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <Image HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="45"
                                    Source="{Binding Icon}" />
                             <StackPanel Orientation="Vertical">
@@ -19,12 +19,10 @@
                                 </StackPanel>
 
                             </StackPanel>
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="remove.png" MouseUp="RemoveImage_MouseUp" Width="24px" Height="24px"
-                                   HorizontalAlignment="Right" />
-                            <Image Source="edit.png" MouseUp="EditImage_MouseUp" Width="24px" Height="24px"
-                                   HorizontalAlignment="Right" />
+                        </DockPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Source="edit.png" MouseUp="EditImage_MouseUp" Width="24px" Height="24px" />
+                            <Image Source="remove.png" MouseUp="RemoveImage_MouseUp" Width="24px" Height="24px" />
                         </StackPanel>
 
                     </Grid>
