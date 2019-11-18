@@ -1,42 +1,29 @@
 # Steam Account Switcher
 
-[![Join the chat at https://gitter.im/W3D3/SteamAccountSwitcher](https://badges.gitter.im/W3D3/SteamAccountSwitcher.svg)](https://gitter.im/W3D3/SteamAccountSwitcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+SteamAccountSwitcher is a Windows application for easy switching between Steam accounts
 
-SteamAccountSwitcher is a Windows Application for easy switching between Steam accounts.
+## Features
 
-- Add/Edit/Remove umlimited different Steam accounts and instantly switch between them
-- Accounts are encrypted and saved locally
+This is a fork of the [original project by W3D3](https://github.com/W3D3/SteamAccountSwitcher). New features include:
 
-## Version
+- Portable
+- No encryption
+- Store settings in working directory
+- JSON instead of XML
+- Code cleanup
+- Upgraded to .NET 4.8
 
-See releases for changelogs.
+## Screenshot
 
-Development is discontinued for version 1. (Working on v2, first release coming ~~end of October 2016.~~ I lied. Probably soon though.)
-[New repo](https://github.com/W3D3/SteamAccountSwitcher2) (Looking for testers)
-
-## Screenshots
-
-![alt text](http://puu.sh/9I1E9/aa53d096c5.png, "Screenshot 1")
+![screenshot](screenshot.png)
 
 ## Download
-
-[Latest Release](https://github.com/W3D3/SteamAccountSwitcher/releases/latest)
-
-## To-Do
-
-- Automatic Updating (Done, needs testing)
-- Steam Status check (Done, will be in next release)
-- New Crypto code
-- (optional) Master Password
-- ???
-
-Feel free to open an issue if you have any ideas for features/improvements that you'd like to see.
-I am also looking for a new logo that reflect the "recent" steam color-palette change better than the all black one.
+Check out the `Releases` page
 
 ## Credit
+
 - [BoneyardBrew for the application icon](http://boneyardbrew.deviantart.com/art/Modern-Steam-Icon-421263397)
 - [SimekOneLove for the account icons](http://www.iconarchive.com/artist/simekonelove.html)
-
 
 ## License
 
