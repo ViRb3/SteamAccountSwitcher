@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -7,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using Microsoft.Win32;
-using SteamAccountSwitcher.Properties;
 
 namespace SteamAccountSwitcher
 {
