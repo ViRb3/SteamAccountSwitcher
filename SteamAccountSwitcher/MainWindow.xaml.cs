@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
-using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace SteamAccountSwitcher
 {
@@ -75,14 +75,15 @@ namespace SteamAccountSwitcher
         private void SaveSteamData()
         {
             var file = new StreamWriter(SteamDataFileInfo.FullName);
-            file.Write(new JavaScriptSerializer().Serialize(_steamData));
+            new JsonSerializer().Serialize(file, _steamData);
             file.Close();
         }
 
         private void ReadSteamData()
         {
-            var text = File.ReadAllText(SteamDataFileInfo.FullName);
-            _steamData = new JavaScriptSerializer().Deserialize<SteamData>(text);
+            using (var file = File.OpenText(SteamDataFileInfo.FullName))
+            using (var text = new JsonTextReader(file))
+                _steamData = new JsonSerializer().Deserialize<SteamData>(text);
         }
 
         private void listBoxAccounts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
