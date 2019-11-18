@@ -79,9 +79,9 @@ namespace SteamAccountSwitcher
 
         private void SaveSteamData()
         {
-            var file = new StreamWriter(SteamDataFileInfo.FullName);
-            new JsonSerializer().Serialize(file, _steamData);
-            file.Close();
+            using (var file = new StreamWriter(SteamDataFileInfo.FullName))
+            using (var text = new JsonTextWriter(file) {Formatting = Formatting.Indented})
+                new JsonSerializer().Serialize(text, _steamData);
         }
 
         private void ReadSteamData()
