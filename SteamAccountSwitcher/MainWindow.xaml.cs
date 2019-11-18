@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Xml.Serialization;
 using Microsoft.Win32;
+using System.Web.Script.Serialization;
 
 namespace SteamAccountSwitcher
 {
@@ -13,7 +12,7 @@ namespace SteamAccountSwitcher
     {
         private readonly Steam _steam;
         private AccountList _accountList;
-        private static readonly FileInfo AccountFile = new FileInfo("accounts.xml");
+        private static readonly FileInfo AccountFile = new FileInfo("accounts.json");
 
         public MainWindow()
         {
@@ -71,35 +70,15 @@ namespace SteamAccountSwitcher
 
         private void WriteAccountsToFile()
         {
-            var xmlAccounts = ToXML(_accountList);
             var file = new StreamWriter(AccountFile.FullName);
-            file.Write(xmlAccounts);
+            file.Write(new JavaScriptSerializer().Serialize(_accountList));
             file.Close();
         }
 
         private void ReadAccountsFromFile()
         {
             var text = File.ReadAllText(AccountFile.FullName);
-            _accountList = FromXML<AccountList>(text);
-        }
-
-        private static T FromXML<T>(string xml)
-        {
-            using (var stringReader = new StringReader(xml))
-            {
-                var serializer = new XmlSerializer(typeof(T));
-                return (T) serializer.Deserialize(stringReader);
-            }
-        }
-
-        private static string ToXML<T>(T obj)
-        {
-            using (var stringWriter = new StringWriter(new StringBuilder()))
-            {
-                var xmlSerializer = new XmlSerializer(typeof(T));
-                xmlSerializer.Serialize(stringWriter, obj);
-                return stringWriter.ToString();
-            }
+            _accountList = new JavaScriptSerializer().Deserialize<AccountList>(text);
         }
 
         private void listBoxAccounts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
