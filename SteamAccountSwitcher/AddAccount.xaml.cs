@@ -31,19 +31,19 @@ namespace SteamAccountSwitcher
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (comboBoxType.SelectedItem == null || string.IsNullOrWhiteSpace(textBoxProfilename.Text) ||
+                string.IsNullOrWhiteSpace(textBoxUsername.Text) || string.IsNullOrWhiteSpace(textBoxPassword.TextInput))
             {
-                Account.Type = (AccountType) comboBoxType.SelectedItem;
-                Account.Name = textBoxProfilename.Text;
-                Account.Username = textBoxUsername.Text;
-                Account.Password = textBoxPassword.Password;
-                DialogResult = true;
-            }
-            catch
-            {
-                DialogResult = false;
+                MessageBox.Show("Invalid account data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
+            Account.Type = (AccountType) comboBoxType.SelectedItem;
+            Account.Name = textBoxProfilename.Text;
+            Account.Username = textBoxUsername.Text;
+            Account.Password = textBoxPassword.Password;
+
+            DialogResult = true;
             Close();
         }
     }
