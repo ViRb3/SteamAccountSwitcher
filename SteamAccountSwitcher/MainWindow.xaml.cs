@@ -14,7 +14,6 @@ namespace SteamAccountSwitcher
     {
         private readonly Steam _steam;
         private AccountList _accountList;
-        private readonly string settingsSave;
 
         public MainWindow()
         {
@@ -29,10 +28,6 @@ namespace SteamAccountSwitcher
 
             _accountList = new AccountList();
 
-            //Get directory of Executable
-            settingsSave = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)
-                .TrimStart(@"file:\\".ToCharArray());
-            
             try
             {
                 ReadAccountsFromFile();
@@ -88,14 +83,14 @@ namespace SteamAccountSwitcher
         private void WriteAccountsToFile()
         {
             var xmlAccounts = ToXML(_accountList);
-            var file = new StreamWriter(settingsSave + "\\accounts.ini");
+            var file = new StreamWriter("accounts.ini");
             file.Write(xmlAccounts);
             file.Close();
         }
 
         private void ReadAccountsFromFile()
         {
-            var text = File.ReadAllText(settingsSave + "\\accounts.ini");
+            var text = File.ReadAllText("accounts.ini");
             _accountList = FromXML<AccountList>(text);
         }
 
