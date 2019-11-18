@@ -32,7 +32,7 @@ namespace SteamAccountSwitcher
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             if (comboBoxType.SelectedItem == null || string.IsNullOrWhiteSpace(textBoxProfilename.Text) ||
-                string.IsNullOrWhiteSpace(textBoxUsername.Text) || string.IsNullOrWhiteSpace(textBoxPassword.TextInput))
+                string.IsNullOrWhiteSpace(textBoxUsername.Text) || string.IsNullOrWhiteSpace(textBoxPassword.Password))
             {
                 MessageBox.Show("Invalid account data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
