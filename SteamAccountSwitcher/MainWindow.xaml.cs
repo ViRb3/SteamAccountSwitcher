@@ -29,7 +29,7 @@ namespace SteamAccountSwitcher
                 if (_steamData.SteamFilePath == null)
                 {
                     MessageBox.Show(
-                        "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
+                        "Cannot continue without a valid Steam installation. Program will now close.",
                         "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
                     Close();
                     return;
@@ -49,7 +49,7 @@ namespace SteamAccountSwitcher
             var dialog = new OpenFileDialog();
             dialog.Filter = "Steam |steam.exe";
             dialog.InitialDirectory = initialDirectory;
-            dialog.Title = "Select your Steam Installation";
+            dialog.Title = "Select your Steam installation";
             return dialog.ShowDialog() == true
                 ? dialog.FileName
                 : null;
@@ -113,7 +113,7 @@ namespace SteamAccountSwitcher
 
             var selectedAcc = (SteamAccount) itemClicked.DataContext;
             var dialogResult =
-                MessageBox.Show("Are you sure you want to delete the '" + selectedAcc.Name + "' account?",
+                MessageBox.Show($"Are you sure you want to delete the account '{selectedAcc.Name}'?",
                     "Delete Account", MessageBoxButton.YesNo);
 
             if (dialogResult != MessageBoxResult.Yes)
