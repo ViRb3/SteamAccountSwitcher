@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -25,8 +26,10 @@ namespace SteamAccountSwitcher
 
             if (!File.Exists(_steamData.SteamFilePath))
             {
-                _steamData.SteamFilePath = SelectSteamFile(@"C:\Program Files (x86)\Steam");
-                if (_steamData.SteamFilePath == null)
+                var steamFilePath =
+                    SelectSteamFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                        "Steam"));
+                if (steamFilePath == null)
                 {
                     MessageBox.Show(
                         "Cannot continue without a valid Steam installation. Program will now close.",
@@ -34,6 +37,8 @@ namespace SteamAccountSwitcher
                     Close();
                     return;
                 }
+
+                _steamData.SteamFilePath = steamFilePath;
             }
 
             SaveSteamData();
@@ -47,7 +52,7 @@ namespace SteamAccountSwitcher
         private static string SelectSteamFile(string initialDirectory)
         {
             var dialog = new OpenFileDialog();
-            dialog.Filter = "Steam |steam.exe";
+            dialog.Filter = "Steam|steam.exe";
             dialog.InitialDirectory = initialDirectory;
             dialog.Title = "Select your Steam installation";
             return dialog.ShowDialog() == true
