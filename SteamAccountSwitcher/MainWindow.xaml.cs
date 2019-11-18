@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,7 +26,7 @@ namespace SteamAccountSwitcher
                 SaveSteamData();
 
             listBoxAccounts.ItemsSource = _steamData.Accounts;
-            listBoxAccounts.Items.Refresh();
+            UpdateListBoxView();
 
             _steamData.SteamFilePath = SelectSteamFile(@"C:\Program Files (x86)\Steam");
             if (_steamData.SteamFilePath == null)
@@ -65,7 +66,7 @@ namespace SteamAccountSwitcher
                 return;
 
             _steamData.Accounts.Add(newAccWindow.Account);
-            listBoxAccounts.Items.Refresh();
+            UpdateListBoxView();
         }
 
         private void SaveSteamData()
@@ -94,7 +95,7 @@ namespace SteamAccountSwitcher
             newAccWindow.ShowDialog();
 
             _steamData.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
-            listBoxAccounts.Items.Refresh();
+            UpdateListBoxView();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -115,7 +116,14 @@ namespace SteamAccountSwitcher
                 return;
 
             _steamData.Accounts.Remove((SteamAccount) listBoxAccounts.SelectedItem);
+            UpdateListBoxView();
+        }
+
+        private void UpdateListBoxView()
+        {
             listBoxAccounts.Items.Refresh();
+            if (_steamData.Accounts.Any())
+                buttonEditAccount.IsEnabled = true;
         }
     }
 }
