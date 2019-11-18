@@ -126,6 +126,7 @@ namespace SteamAccountSwitcher
         private void UpdateListBoxView()
         {
             listBoxAccounts.Items.Refresh();
+            SaveSteamData();
             if (_steamData.Accounts.Any())
                 buttonEditAccount.IsEnabled = true;
         }
