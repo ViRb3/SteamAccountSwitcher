@@ -27,10 +27,5 @@
                 }
             }
         }
-
-        public override string ToString()
-        {
-            return Name + "~ (user: " + Username + ")";
-        }
     }
 }
