@@ -11,24 +11,24 @@ namespace SteamAccountSwitcher
     public partial class MainWindow : Window
     {
         private readonly Steam _steam;
-        private AccountList _accountList;
-        private static readonly FileInfo AccountFile = new FileInfo("accounts.json");
+        private SteamData _steamData;
+        private static readonly FileInfo SteamDataFileInfo = new FileInfo("steam-data.json");
 
         public MainWindow()
         {
             InitializeComponent();
-            _accountList = new AccountList();
+            _steamData = new SteamData();
 
-            if (AccountFile.Exists)
-                ReadAccountsFromFile();
+            if (SteamDataFileInfo.Exists)
+                ReadSteamData();
             else
-                WriteAccountsToFile();
+                SaveSteamData();
 
-            listBoxAccounts.ItemsSource = _accountList.Accounts;
+            listBoxAccounts.ItemsSource = _steamData.Accounts;
             listBoxAccounts.Items.Refresh();
 
-            _accountList.InstallDir = SelectSteamFile(@"C:\Program Files (x86)\Steam");
-            if (_accountList.InstallDir == null)
+            _steamData.SteamFilePath = SelectSteamFile(@"C:\Program Files (x86)\Steam");
+            if (_steamData.SteamFilePath == null)
             {
                 MessageBox.Show(
                     "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
@@ -37,7 +37,7 @@ namespace SteamAccountSwitcher
                 return;
             }
 
-            _steam = new Steam(_accountList.InstallDir);
+            _steam = new Steam(_steamData.SteamFilePath);
         }
 
         private static string SelectSteamFile(string initialDirectory)
@@ -64,21 +64,21 @@ namespace SteamAccountSwitcher
             if (newAccWindow.ShowDialog() != true)
                 return;
 
-            _accountList.Accounts.Add(newAccWindow.Account);
+            _steamData.Accounts.Add(newAccWindow.Account);
             listBoxAccounts.Items.Refresh();
         }
 
-        private void WriteAccountsToFile()
+        private void SaveSteamData()
         {
-            var file = new StreamWriter(AccountFile.FullName);
-            file.Write(new JavaScriptSerializer().Serialize(_accountList));
+            var file = new StreamWriter(SteamDataFileInfo.FullName);
+            file.Write(new JavaScriptSerializer().Serialize(_steamData));
             file.Close();
         }
 
-        private void ReadAccountsFromFile()
+        private void ReadSteamData()
         {
-            var text = File.ReadAllText(AccountFile.FullName);
-            _accountList = new JavaScriptSerializer().Deserialize<AccountList>(text);
+            var text = File.ReadAllText(SteamDataFileInfo.FullName);
+            _steamData = new JavaScriptSerializer().Deserialize<SteamData>(text);
         }
 
         private void listBoxAccounts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -93,13 +93,13 @@ namespace SteamAccountSwitcher
             newAccWindow.Owner = this;
             newAccWindow.ShowDialog();
 
-            _accountList.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
+            _steamData.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
             listBoxAccounts.Items.Refresh();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            WriteAccountsToFile();
+            SaveSteamData();
         }
 
         private void Image_MouseUp(object sender, MouseButtonEventArgs e)
@@ -114,7 +114,7 @@ namespace SteamAccountSwitcher
             if (dialogResult != MessageBoxResult.Yes)
                 return;
 
-            _accountList.Accounts.Remove((SteamAccount) listBoxAccounts.SelectedItem);
+            _steamData.Accounts.Remove((SteamAccount) listBoxAccounts.SelectedItem);
             listBoxAccounts.Items.Refresh();
         }
     }

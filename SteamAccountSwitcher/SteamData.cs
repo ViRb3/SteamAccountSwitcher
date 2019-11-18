@@ -2,14 +2,14 @@
 
 namespace SteamAccountSwitcher
 {
-    public class AccountList
+    public class SteamData
     {
-        public AccountList()
+        public SteamData()
         {
             Accounts = new List<SteamAccount>();
         }
 
-        public string InstallDir { get; set; }
+        public string SteamFilePath { get; set; }
         public List<SteamAccount> Accounts { get; }
     }
 }

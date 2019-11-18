@@ -73,7 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AccountList.cs" />
+    <Compile Include="SteamData.cs" />
     <Compile Include="AccountType.cs" />
     <Compile Include="AddAccount.xaml.cs">
       <DependentUpon>AddAccount.xaml</DependentUpon>
