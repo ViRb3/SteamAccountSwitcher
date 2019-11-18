@@ -12,6 +12,22 @@
             return "-login " + Username + " " + Password;
         }
 
+        public string Icon
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case AccountType.Main:
+                        return "steam-ico-main.png";
+                    case AccountType.Smurf:
+                        return "steam-ico-smurf.png";
+                    default:
+                        return null;
+                }
+            }
+        }
+
         public override string ToString()
         {
             return Name + "~ (user: " + Username + ")";
