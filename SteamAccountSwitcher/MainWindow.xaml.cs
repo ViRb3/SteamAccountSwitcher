@@ -97,9 +97,17 @@ namespace SteamAccountSwitcher
             _steam.StartSteamAccount(selectedAcc);
         }
 
-        private void buttonEditAccount_Click(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            var newAccWindow = new AddAccount((SteamAccount) listBoxAccounts.SelectedItem);
+            SaveSteamData();
+        }
+
+        private void EditImage_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var itemClicked = (Image)e.Source;
+
+            var selectedAcc = (SteamAccount)itemClicked.DataContext;
+            var newAccWindow = new AddAccount(selectedAcc);
             newAccWindow.Owner = this;
             newAccWindow.ShowDialog();
 
@@ -107,12 +115,7 @@ namespace SteamAccountSwitcher
             UpdateListBoxView();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            SaveSteamData();
-        }
-
-        private void Image_MouseUp(object sender, MouseButtonEventArgs e)
+        private void RemoveImage_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var itemClicked = (Image) e.Source;
 
@@ -132,8 +135,6 @@ namespace SteamAccountSwitcher
         {
             listBoxAccounts.Items.Refresh();
             SaveSteamData();
-            if (_steamData.Accounts.Any())
-                buttonEditAccount.IsEnabled = true;
         }
     }
 }

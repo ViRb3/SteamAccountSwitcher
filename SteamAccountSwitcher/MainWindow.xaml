@@ -21,7 +21,9 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
-                            <Image Source="remove.png" MouseUp="Image_MouseUp" Width="24px" Height="24px"
+                            <Image Source="remove.png" MouseUp="RemoveImage_MouseUp" Width="24px" Height="24px"
+                                   HorizontalAlignment="Right" />
+                            <Image Source="edit.png" MouseUp="EditImage_MouseUp" Width="24px" Height="24px"
                                    HorizontalAlignment="Right" />
                         </StackPanel>
 
@@ -38,8 +40,6 @@
 
         <Button x:Name="buttonAddAccount" Content="Add" Margin="10,0,0,10" VerticalAlignment="Bottom"
                 Click="buttonAddAccount_Click" HorizontalAlignment="Left" Width="35" />
-        <Button x:Name="buttonEditAccount" Content="Edit" Margin="50,0,0,10" Click="buttonEditAccount_Click"
-                Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35" IsEnabled="False" />
 
         <Button x:Name="buttonLogout" Content="Steam Logout" Margin="0,0,10,10" Click="buttonLogout_Click"
                 Foreground="#FFDC0000" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="86" />
