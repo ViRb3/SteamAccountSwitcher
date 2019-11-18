@@ -20,14 +20,6 @@ namespace SteamAccountSwitcher
         public MainWindow()
         {
             InitializeComponent();
-
-            Top = Settings.Default.Top;
-            Left = Settings.Default.Left;
-            Height = Settings.Default.Height;
-            Width = Settings.Default.Width;
-
-            if (Settings.Default.Maximized) WindowState = WindowState.Maximized;
-
             _accountList = new AccountList();
 
             if (AccountFile.Exists)
@@ -131,26 +123,6 @@ namespace SteamAccountSwitcher
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             WriteAccountsToFile();
-
-            if (WindowState == WindowState.Maximized)
-            {
-                // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
-                Settings.Default.Top = RestoreBounds.Top;
-                Settings.Default.Left = RestoreBounds.Left;
-                Settings.Default.Height = RestoreBounds.Height;
-                Settings.Default.Width = RestoreBounds.Width;
-                Settings.Default.Maximized = true;
-            }
-            else
-            {
-                Settings.Default.Top = Top;
-                Settings.Default.Left = Left;
-                Settings.Default.Height = Height;
-                Settings.Default.Width = Width;
-                Settings.Default.Maximized = false;
-            }
-
-            Settings.Default.Save();
         }
 
         private void Image_MouseUp(object sender, MouseButtonEventArgs e)
