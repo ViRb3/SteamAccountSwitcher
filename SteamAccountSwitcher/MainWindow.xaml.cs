@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,16 +10,11 @@ using SteamAccountSwitcher.Properties;
 
 namespace SteamAccountSwitcher
 {
-    /// ****
-    /// SteamAccountSwitcher
-    /// Copyright by Christoph Wedenig
-    /// ****
     public partial class MainWindow : Window
     {
-        private AccountList accountList;
-
+        private readonly Steam _steam;
+        private AccountList _accountList;
         private readonly string settingsSave;
-        private readonly Steam steam;
 
         public MainWindow()
         {
@@ -33,7 +27,7 @@ namespace SteamAccountSwitcher
 
             if (Settings.Default.Maximized) WindowState = WindowState.Maximized;
 
-            accountList = new AccountList();
+            _accountList = new AccountList();
 
             //Get directory of Executable
             settingsSave = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)
@@ -47,30 +41,26 @@ namespace SteamAccountSwitcher
             {
                 //Maybe create file?
             }
-            
-            listBoxAccounts.ItemsSource = accountList.Accounts;
+
+            listBoxAccounts.ItemsSource = _accountList.Accounts;
             listBoxAccounts.Items.Refresh();
 
-            if (accountList.InstallDir == "" || accountList.InstallDir == null)
+            _accountList.InstallDir = SelectSteamFile(@"C:\Program Files (x86)\Steam");
+            if (_accountList.InstallDir == null)
             {
-                accountList.InstallDir = SelectSteamFile(@"C:\Program Files (x86)\Steam");
-                if (accountList.InstallDir == null)
-                {
-                    MessageBox.Show(
-                        "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
-                        "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Close();
-                }
+                MessageBox.Show(
+                    "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
+                    "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
 
-            steam = new Steam(accountList.InstallDir);
+            _steam = new Steam(_accountList.InstallDir);
         }
 
-        private string SelectSteamFile(string initialDirectory)
+        private static string SelectSteamFile(string initialDirectory)
         {
             var dialog = new OpenFileDialog();
-            dialog.Filter =
-                "Steam |steam.exe";
+            dialog.Filter = "Steam |steam.exe";
             dialog.InitialDirectory = initialDirectory;
             dialog.Title = "Select your Steam Installation";
             return dialog.ShowDialog() == true
@@ -80,38 +70,36 @@ namespace SteamAccountSwitcher
 
         private void buttonLogout_Click(object sender, RoutedEventArgs e)
         {
-            steam.LogoutSteam();
+            _steam.LogoutSteam();
         }
 
         private void buttonAddAccount_Click(object sender, RoutedEventArgs e)
         {
             var newAccWindow = new AddAccount();
             newAccWindow.Owner = this;
-            newAccWindow.ShowDialog();
 
-            if (newAccWindow.Account != null)
-            {
-                accountList.Accounts.Add(newAccWindow.Account);
+            if (newAccWindow.ShowDialog() != true)
+                return;
 
-                listBoxAccounts.Items.Refresh();
-            }
+            _accountList.Accounts.Add(newAccWindow.Account);
+            listBoxAccounts.Items.Refresh();
         }
 
-        public void WriteAccountsToFile()
+        private void WriteAccountsToFile()
         {
-            var xmlAccounts = ToXML(accountList);
+            var xmlAccounts = ToXML(_accountList);
             var file = new StreamWriter(settingsSave + "\\accounts.ini");
             file.Write(xmlAccounts);
             file.Close();
         }
 
-        public void ReadAccountsFromFile()
+        private void ReadAccountsFromFile()
         {
             var text = File.ReadAllText(settingsSave + "\\accounts.ini");
-            accountList = FromXML<AccountList>(text);
+            _accountList = FromXML<AccountList>(text);
         }
 
-        public static T FromXML<T>(string xml)
+        private static T FromXML<T>(string xml)
         {
             using (var stringReader = new StringReader(xml))
             {
@@ -120,7 +108,7 @@ namespace SteamAccountSwitcher
             }
         }
 
-        public string ToXML<T>(T obj)
+        private static string ToXML<T>(T obj)
         {
             using (var stringWriter = new StringWriter(new StringBuilder()))
             {
@@ -133,25 +121,17 @@ namespace SteamAccountSwitcher
         private void listBoxAccounts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedAcc = (SteamAccount) listBoxAccounts.SelectedItem;
-            steam.StartSteamAccount(selectedAcc);
+            _steam.StartSteamAccount(selectedAcc);
         }
-
 
         private void buttonEditAccount_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxAccounts.SelectedItem != null)
-            {
-                var newAccWindow = new AddAccount((SteamAccount) listBoxAccounts.SelectedItem);
-                newAccWindow.Owner = this;
-                newAccWindow.ShowDialog();
+            var newAccWindow = new AddAccount((SteamAccount) listBoxAccounts.SelectedItem);
+            newAccWindow.Owner = this;
+            newAccWindow.ShowDialog();
 
-                if (newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
-                {
-                    accountList.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
-
-                    listBoxAccounts.Items.Refresh();
-                }
-            }
+            _accountList.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
+            listBoxAccounts.Items.Refresh();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -187,15 +167,12 @@ namespace SteamAccountSwitcher
             var dialogResult =
                 MessageBox.Show("Are you sure you want to delete the '" + selectedAcc.Name + "' account?",
                     "Delete Account", MessageBoxButton.YesNo);
-            if (dialogResult == MessageBoxResult.Yes)
-            {
-                accountList.Accounts.Remove((SteamAccount) listBoxAccounts.SelectedItem);
-                listBoxAccounts.Items.Refresh();
-            }
-            else if (dialogResult == MessageBoxResult.No)
-            {
-                //do something else
-            }
+
+            if (dialogResult != MessageBoxResult.Yes)
+                return;
+
+            _accountList.Accounts.Remove((SteamAccount) listBoxAccounts.SelectedItem);
+            listBoxAccounts.Items.Refresh();
         }
     }
 }

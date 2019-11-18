@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 
 namespace SteamAccountSwitcher
@@ -28,7 +27,7 @@ namespace SteamAccountSwitcher
             textBoxPassword.Password = editAccount.Password;
         }
 
-        public SteamAccount Account { get; private set; }
+        public SteamAccount Account { get; }
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
@@ -38,20 +37,14 @@ namespace SteamAccountSwitcher
                 Account.Name = textBoxProfilename.Text;
                 Account.Username = textBoxUsername.Text;
                 Account.Password = textBoxPassword.Password;
+                DialogResult = true;
             }
             catch
             {
-                Account = null;
+                DialogResult = false;
             }
 
             Close();
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            if (Account != null)
-                if (Account.Username == "" || Account.Username == null)
-                    Account = null;
         }
     }
 }

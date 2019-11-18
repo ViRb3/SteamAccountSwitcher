@@ -10,7 +10,6 @@ namespace SteamAccountSwitcher
         }
 
         public string InstallDir { get; set; }
-
-        public List<SteamAccount> Accounts { get; set; }
+        public List<SteamAccount> Accounts { get; }
     }
 }

@@ -1,65 +1,50 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace SteamAccountSwitcher
 {
     internal class Steam
     {
-        public Steam(string installDir)
+        public Steam(string steamPath)
         {
-            InstallDir = installDir;
+            SteamPath = steamPath;
         }
 
-        public string InstallDir { get; set; }
+        private string SteamPath { get; }
 
-        public bool IsSteamRunning()
+        private static bool IsSteamRunning()
         {
-            var pname = Process.GetProcessesByName("steam");
-            if (pname.Length == 0)
-                return false;
-            return true;
+            return Process.GetProcessesByName("steam").Any();
         }
 
-        public void KillSteam()
+        private static void KillSteam()
         {
-            var proc = Process.GetProcessesByName("steam");
-            proc[0].Kill();
+            foreach (var p in Process.GetProcessesByName("steam"))
+                p.Kill();
         }
 
-        public bool StartSteamAccount(SteamAccount a)
+        public void StartSteamAccount(SteamAccount a)
         {
-            var finished = false;
-
-            if (IsSteamRunning()) KillSteam();
-
-            while (finished == false)
-                if (IsSteamRunning() == false)
-                {
-                    var p = new Process();
-                    if (File.Exists(InstallDir))
-                    {
-                        p.StartInfo = new ProcessStartInfo(InstallDir, a.GetStartParameters());
-                        p.Start();
-                        finished = true;
-                        return true;
-                    }
-                }
-
-            return false;
-        }
-
-
-        public bool LogoutSteam()
-        {
-            var p = new Process();
-            if (File.Exists(InstallDir))
+            var counter = 0;
+            while (IsSteamRunning())
             {
-                p.StartInfo = new ProcessStartInfo(InstallDir, "-shutdown");
-                p.Start();
-                return true;
+                if (counter > 10)
+                    throw new Exception("Could not stop Steam");
+                counter++;
+                KillSteam();
             }
 
-            return false;
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo(SteamPath, a.GetStartParameters());
+            p.Start();
+        }
+
+        public void LogoutSteam()
+        {
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo(SteamPath, "-shutdown");
+            p.Start();
         }
     }
 }
