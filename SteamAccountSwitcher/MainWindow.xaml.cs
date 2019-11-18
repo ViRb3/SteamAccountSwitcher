@@ -15,7 +15,7 @@ namespace SteamAccountSwitcher
     {
         private readonly Steam _steam;
         private AccountList _accountList;
-        private static readonly FileInfo AccountFile = new FileInfo("accounts.ini");
+        private static readonly FileInfo AccountFile = new FileInfo("accounts.xml");
 
         public MainWindow()
         {
