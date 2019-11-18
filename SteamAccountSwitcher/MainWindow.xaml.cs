@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -14,6 +15,7 @@ namespace SteamAccountSwitcher
     {
         private readonly Steam _steam;
         private AccountList _accountList;
+        private static readonly FileInfo AccountFile = new FileInfo("accounts.ini");
 
         public MainWindow()
         {
@@ -28,14 +30,10 @@ namespace SteamAccountSwitcher
 
             _accountList = new AccountList();
 
-            try
-            {
+            if (AccountFile.Exists)
                 ReadAccountsFromFile();
-            }
-            catch
-            {
-                //Maybe create file?
-            }
+            else
+                WriteAccountsToFile();
 
             listBoxAccounts.ItemsSource = _accountList.Accounts;
             listBoxAccounts.Items.Refresh();
@@ -47,6 +45,7 @@ namespace SteamAccountSwitcher
                     "You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.",
                     "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
+                return;
             }
 
             _steam = new Steam(_accountList.InstallDir);
@@ -83,14 +82,14 @@ namespace SteamAccountSwitcher
         private void WriteAccountsToFile()
         {
             var xmlAccounts = ToXML(_accountList);
-            var file = new StreamWriter("accounts.ini");
+            var file = new StreamWriter(AccountFile.FullName);
             file.Write(xmlAccounts);
             file.Close();
         }
 
         private void ReadAccountsFromFile()
         {
-            var text = File.ReadAllText("accounts.ini");
+            var text = File.ReadAllText(AccountFile.FullName);
             _accountList = FromXML<AccountList>(text);
         }
 
