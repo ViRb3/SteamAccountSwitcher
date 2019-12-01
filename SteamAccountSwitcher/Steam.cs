@@ -21,7 +21,10 @@ namespace SteamAccountSwitcher
         private static void KillSteam()
         {
             foreach (var p in Process.GetProcessesByName("steam"))
-                p.Kill();
+                try
+                {
+                    p.Kill();
+                } catch (Exception) { }
         }
 
         public void StartSteamAccount(SteamAccount a)
