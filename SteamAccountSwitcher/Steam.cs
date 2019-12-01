@@ -34,8 +34,8 @@ namespace SteamAccountSwitcher
             {
                 if (counter > 10)
                     throw new Exception("Could not stop Steam");
-                counter++;
                 KillSteam();
+                counter++;
             }
 
             var p = new Process();
